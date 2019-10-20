@@ -5,19 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Configuration;
-using System.Data.Common;
 
 namespace DSS19
 {
 
-    class Controller
+    class Controller 
     {
         private Persistence P = new Persistence();
         string connectionString;
+        string dbPath = "";
 
         public Controller(string dbpath)
         {
             //string dbpath = @"C:\Users\Enrico\Desktop\ordiniMI2018.sqlite";
+            dbPath = dbpath;
             string sdb = ConfigurationManager.AppSettings["dbServer"]; 
 
             switch (sdb)
@@ -30,7 +31,7 @@ namespace DSS19
                                    P.factory = ConfigurationManager.ConnectionStrings["LocalSqlServConn"].ProviderName;
                                    break;
                 case "RemoteSqlServConn": connectionString = ConfigurationManager.ConnectionStrings["RemoteSQLConn"].ConnectionString;
-                                          P.factory = ConfigurationManager.ConnectionStrings["LocalSqlServConn"].ProviderName;
+                                          P.factory = ConfigurationManager.ConnectionStrings["RemoteSQLConn"].ProviderName;
                                           break;
             }
             P.connectionString = connectionString;
@@ -41,27 +42,39 @@ namespace DSS19
             Trace.WriteLine("Controller read DB");
             if(custID == "")
             {
-                P.readDb();
+                P.SelectTop100();
             }
             else
             {
-                P.readDb(custID);
+                P.SelectCustOrders(custID);
             }
         }
 
         public void insert(string cust)
         {
-            P.insert(cust);
+            P.Insert(cust);
         }
 
         public void delete(string cust)
         {
-            P.delete(cust);
+            P.Delete(cust);
         }
 
         public void update(string oldCust, string newCust)
         {
-            P.update(oldCust, newCust);
+            P.Update(oldCust, newCust);
+        }
+
+        public void readCustomerList()
+        {
+            string res = P.readCustomerListORM(dbPath, 10);
+            Trace.WriteLine(res);
+        }
+
+        public void readCustomerOrder()
+        {
+            string res = P.readCustomerOrderORM(dbPath, "cust1");
+            Trace.WriteLine(res);
         }
     }
 }

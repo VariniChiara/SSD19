@@ -13,29 +13,12 @@ namespace DSS19
 {
     class Persistence //model
     {
-        public string connectionString;
-        private IDbConnection conn = null;
+        public string connectionString = "";
         public string factory = "";
-
-        public void readDb()
+        private IDbConnection conn = null;
+       
+        private IDbConnection OpenConnection()
         {
-            Trace.WriteLine("Persistance write DB");
-            queryAllOrder();
-        }
-
-        public void readDb(string custID)
-        {
-            Trace.WriteLine("Persistance write DB with custID");
-            queryCustomerID(custID);
-        }
-
-        private IDbConnection openConnection()
-        {
-            // string dbpath = @"C:\Users\Enrico\Desktop\ordiniMI2018.sqlite"; //connessione al DB sqlite
-            // string sqlLiteConnString = @"Data Source=" + dbpath + "; Version=3";
-            //conn = new SQLiteConnection(connectionString);
-            //conn = new SqlConnection(connectionString);
-
             DbProviderFactory dbFactory = DbProviderFactories.GetFactory(factory);
             conn = dbFactory.CreateConnection();
             try
@@ -50,13 +33,11 @@ namespace DSS19
                 Trace.WriteLine("[PERSISTANCE] errore: " + ex.Message);
             }
             return null;
-
-            
         }
 
-        private IDataReader executeQuery(string queryText)
+        private IDataReader ExecuteQuery(string queryText)
         {
-            conn = openConnection();
+            conn = OpenConnection();
             IDbCommand com = conn.CreateCommand();
             try
             {
@@ -72,108 +53,183 @@ namespace DSS19
             return null;
         }
 
-        private void queryAllOrder() 
+        public void SelectTop100() 
         {
             try 
             {
                 string queryText = "select TOP (100) id, customer, time, quant from ordini ";
-                 queryText = "select id, customer, time, quant from ordini LIMIT 100 "; //sqlLite
-                IDataReader reader = executeQuery(queryText);
-                while (reader.Read())
+                if (factory == "System.Data.SQLite")
                 {
-                    Trace.WriteLine(reader["id"] + " " + reader["customer"] + " " + reader["time"] + " " + reader["quant"]); //view.textConsole = ...
+                    queryText = "select id, customer, time, quant from ordini LIMIT 100 "; //sqlLite
                 }
-                reader.Close(); 
+
+                using (IDataReader reader = ExecuteQuery(queryText))
+                {
+                    while (reader.Read())
+                    {
+                        Trace.WriteLine(reader["id"] + " " + reader["customer"] + " " + reader["time"] + " " + reader["quant"]); //view.textConsole = ...
+                    }
+                }
             }
             catch(Exception ex)
             {
                 errorLog("allOrder " + ex.Message);
+            } 
+            finally
+            {
+                Trace.WriteLine("[PERSISTANCE] fine lettura dati ");
+                conn.Close();
             }
-            Trace.WriteLine("[PERSISTANCE] fine lettura dati ");
-            conn.Close();
-
+            
         }
 
-        private void queryCustomerID(string custID) 
+        public void SelectCustOrders(string custID) 
         {
             List<int> quantLst = new List<int>();
             try
             {
                 string queryText = "SELECT id, customer, time, quant from ordini where customer = \'"+custID+"\'";
-                IDataReader reader = executeQuery(queryText);
-                while (reader.Read())
+                using (IDataReader reader = ExecuteQuery(queryText))
                 {
-                    Trace.WriteLine(reader["id"] + " " + reader["customer"] + " " + reader["time"] + " " + reader["quant"]); //view.textConsole = ...
-                    quantLst.Add(Convert.ToInt32(reader["quant"]));
-
+                    while (reader.Read())
+                    {
+                        Trace.WriteLine(reader["id"] + " " + reader["customer"] + " " + reader["time"] + " " + reader["quant"]); //view.textConsole = ...
+                        quantLst.Add(Convert.ToInt32(reader["quant"]));
+                    }
                 }
-                reader.Close();
             }
             catch (Exception ex)
             {
                 errorLog("customerID " + ex.Message);
+            } 
+            finally
+            {
+                Trace.WriteLine("Quantità: " + string.Join(",", quantLst));
+                Trace.WriteLine("[PERSISTANCE] fine lettura dati ");
+                conn.Close();
             }
-            Trace.WriteLine("Quantità: " + string.Join(",", quantLst));
-            Trace.WriteLine("[PERSISTANCE] fine lettura dati ");
         }
 
-        public void insert(string cust)
+        public void Insert(string cust)
         {
             try
             {
                 string queryText = @"INSERT INTO ordini (customer) VALUES ('"+cust+"') ";
-                IDataReader reader = executeQuery(queryText);
-                queryCustomerID(cust); //to verify the insert
-                reader.Close();
+                using (IDataReader reader = ExecuteQuery(queryText))
+                {
+                    SelectCustOrders(cust); //to verify the insert
+                }             
             }
             catch (Exception ex)
             {
                 errorLog("insert " + ex.Message);
+            } 
+            finally
+            { 
+                Trace.WriteLine("[PERSISTANCE] insert done");
+                conn.Close();
             }
-            Trace.WriteLine("[PERSISTANCE] insert done");
-            conn.Close();
         }
         
-        public void delete(string cust )
+        public void Delete(string cust )
         {
             try
             {
                 string queryText = @"DELETE FROM ordini WHERE customer = '"+cust+"'";
-                IDataReader reader = executeQuery(queryText);
-                queryCustomerID(cust); //to verify the delete
-                reader.Close();
+                using (IDataReader reader = ExecuteQuery(queryText))
+                {
+                    SelectCustOrders(cust); //to verify the insert
+                }
             }
             catch (Exception ex)
             {
                 errorLog("delete " + ex.Message);
             }
-            
-            Trace.WriteLine("[PERSISTANCE] delete done");
-            conn.Close();
+            finally
+            {
+                Trace.WriteLine("[PERSISTANCE] insert done");
+                conn.Close();
+            }
         }
         
-        public void update(string oldCust, string newCust)
+        public void Update(string oldCust, string newCust)
         {
             try
             {
                 string queryText = @"UPDATE ordini SET customer = '"+newCust+"'  WHERE customer = '" + oldCust + "'";
-                IDataReader reader = executeQuery(queryText);
-                queryCustomerID(newCust); //to verify the insert
-                reader.Close();
+                using(IDataReader reader = ExecuteQuery(queryText))
+                {
+                    SelectCustOrders(newCust); //to verify the insert
+                }
             }
             catch (Exception ex)
             {
                 errorLog("update " + ex.Message);
             }
-            Trace.WriteLine("[PERSISTANCE] update done");
-            conn.Close();
+            finally
+            {
+                Trace.WriteLine("[PERSISTANCE] update done");
+                conn.Close();
+            }           
         }
 
         private void errorLog(string errTxt)
         {
             Trace.WriteLine("[PERSISTANCE] errore: " + errTxt);
         }
+
+        // legge una stringa con i codici clienti da graficare
+        public string readCustomerListORM(string dbpath, int n)
+        {
+            List<string> lstClienti;
+            string ret = "Error reading DB";
+            try
+            {
+            //var ctx = new SQLiteDatabaseContext(dbpath);
+                using (var ctx = new SQLiteDatabaseContext(dbpath))
+                {
+                    lstClienti = ctx.Database.SqlQuery<string>("SELECT distinct customer from ordini").ToList();
+                }
+            // legge solo alcuni clienti (si poteva fare tutto nella query)
+                List<string> lstOutStrings = new List<string>();
+                Random r = new Random(550);
+                while (lstOutStrings.Count<n)
+                {
+                    int randomIndex = r.Next(0, lstClienti.Count); //Choose a random object in the list
+                    lstOutStrings.Add("'" + lstClienti[randomIndex] + "'"); //add it to the new, random list
+                    lstClienti.RemoveAt(randomIndex); //remove to avoid duplicates
+                }
+                ret = string.Join(",", lstOutStrings);
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"Error: {ex.Message}");
+            }
+
+            return ret;
+        }
+
+        //legge tutti gli ordini di un cliente
+        public string readCustomerOrderORM(string dbpath, string custID)
+        {
+            List<int> lstOrder;
+            string ret = "Error reading DB";
+            try
+            {
+                using (var ctx = new SQLiteDatabaseContext(dbpath))
+                {
+                    lstOrder = ctx.Database.SqlQuery<int>("SELECT quant from ordini where customer = '" + custID+"'").ToList();
+                }
+                Trace.WriteLine(lstOrder.Count);
+                ret = "";
+                lstOrder.ForEach(o => ret = ret + ","+ o );
+            }
+            catch (Exception ex)
+            {
+                errorLog(ex.Message);
+            }
+
+            return ret;
+        }
     }
-
-
 }

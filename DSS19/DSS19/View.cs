@@ -24,20 +24,6 @@ namespace DSS19
             InitializeComponent();
             _textBoxListener = new TextBoxTraceListener(txtConsole);
             Trace.Listeners.Add(_textBoxListener);
-
-            string dbPath = "";
-            OpenFileDialog OFD = new OpenFileDialog(); //finestra per caricare il file del db
-            if(OFD.ShowDialog() == DialogResult.OK) //TODO mancano i controlli sul tipo del file
-            {
-                dbPath = OFD.FileName;
-                txtConsole.AppendText("Sqlite file name: "+dbPath+Environment.NewLine);
-            }
-            C = new Controller(dbPath);
-        }
-
-        private void toolStripMenuItem2_Click(object sender, EventArgs e)
-        {
-          
         }
 
         private void splitContainer1_Panel2_Paint(object sender, PaintEventArgs e)
@@ -59,7 +45,14 @@ namespace DSS19
         private void loadDb()
         {
             txtConsole.AppendText("Load Db button clicked \n");
-            C.readDb(txtCustomer.Text);
+            string dbPath = "";
+            OpenFileDialog OFD = new OpenFileDialog(); //finestra per caricare il file del db
+            if (OFD.ShowDialog() == DialogResult.OK) //TODO mancano i controlli sul tipo del file
+            {
+                dbPath = OFD.FileName;
+                txtConsole.AppendText("Sqlite file name: " + dbPath + Environment.NewLine);
+            }
+            C = new Controller(dbPath);
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
@@ -106,6 +99,21 @@ namespace DSS19
         private void App_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void toolStripButton2_Click(object sender, EventArgs e)
+        {
+            C.readDb(txtCustomer.Text);
+        }
+
+        private void selectSomeClientsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            C.readCustomerList();
+        }
+
+        private void selectCust1OrderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            C.readCustomerOrder();
         }
     }
 }

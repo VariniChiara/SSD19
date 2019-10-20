@@ -32,8 +32,10 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.readDBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectSomeClientsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.loadDbBtn = new System.Windows.Forms.ToolStripButton();
+            this.serachBtn = new System.Windows.Forms.ToolStripButton();
             this.insertBtn = new System.Windows.Forms.ToolStripButton();
             this.deleteBtn = new System.Windows.Forms.ToolStripButton();
             this.updateBtn = new System.Windows.Forms.ToolStripButton();
@@ -44,6 +46,7 @@
             this.txtCustomer = new System.Windows.Forms.TextBox();
             this.txtConsole = new System.Windows.Forms.TextBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.selectCust1OrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -67,7 +70,9 @@
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.readDBToolStripMenuItem});
+            this.readDBToolStripMenuItem,
+            this.selectSomeClientsToolStripMenuItem,
+            this.selectCust1OrderToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 24);
             this.fileToolStripMenuItem.Text = "File";
@@ -75,15 +80,23 @@
             // readDBToolStripMenuItem
             // 
             this.readDBToolStripMenuItem.Name = "readDBToolStripMenuItem";
-            this.readDBToolStripMenuItem.Size = new System.Drawing.Size(150, 26);
+            this.readDBToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.readDBToolStripMenuItem.Text = "Read DB";
             this.readDBToolStripMenuItem.Click += new System.EventHandler(this.readDBToolStripMenuItem_Click);
+            // 
+            // selectSomeClientsToolStripMenuItem
+            // 
+            this.selectSomeClientsToolStripMenuItem.Name = "selectSomeClientsToolStripMenuItem";
+            this.selectSomeClientsToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.selectSomeClientsToolStripMenuItem.Text = "Select Some clients";
+            this.selectSomeClientsToolStripMenuItem.Click += new System.EventHandler(this.selectSomeClientsToolStripMenuItem_Click);
             // 
             // toolStrip1
             // 
             this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton1,
+            this.loadDbBtn,
+            this.serachBtn,
             this.insertBtn,
             this.deleteBtn,
             this.updateBtn});
@@ -93,15 +106,25 @@
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // toolStripButton1
+            // loadDbBtn
             // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(29, 24);
-            this.toolStripButton1.Text = "Load DB";
-            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            this.loadDbBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.loadDbBtn.Image = ((System.Drawing.Image)(resources.GetObject("loadDbBtn.Image")));
+            this.loadDbBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.loadDbBtn.Name = "loadDbBtn";
+            this.loadDbBtn.Size = new System.Drawing.Size(29, 24);
+            this.loadDbBtn.Text = "Load DB";
+            this.loadDbBtn.Click += new System.EventHandler(this.toolStripButton1_Click);
+            // 
+            // serachBtn
+            // 
+            this.serachBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.serachBtn.Image = ((System.Drawing.Image)(resources.GetObject("serachBtn.Image")));
+            this.serachBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.serachBtn.Name = "serachBtn";
+            this.serachBtn.Size = new System.Drawing.Size(29, 24);
+            this.serachBtn.Text = "serach";
+            this.serachBtn.Click += new System.EventHandler(this.toolStripButton2_Click);
             // 
             // insertBtn
             // 
@@ -218,6 +241,13 @@
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
+            // selectCust1OrderToolStripMenuItem
+            // 
+            this.selectCust1OrderToolStripMenuItem.Name = "selectCust1OrderToolStripMenuItem";
+            this.selectCust1OrderToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.selectCust1OrderToolStripMenuItem.Text = "Select cust1 order";
+            this.selectCust1OrderToolStripMenuItem.Click += new System.EventHandler(this.selectCust1OrderToolStripMenuItem_Click);
+            // 
             // App
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -252,7 +282,7 @@
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem readDBToolStripMenuItem;
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton loadDbBtn;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.TextBox txtConsole;
         private System.Windows.Forms.PictureBox pictureBox1;
@@ -263,6 +293,9 @@
         private System.Windows.Forms.ToolStripButton updateBtn;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtNewCustomer;
+        private System.Windows.Forms.ToolStripButton serachBtn;
+        private System.Windows.Forms.ToolStripMenuItem selectSomeClientsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem selectCust1OrderToolStripMenuItem;
     }
 }
 
