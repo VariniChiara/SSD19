@@ -5,76 +5,61 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Configuration;
+using System.Drawing;
+using PyGAP2019;
 
 namespace DSS19
 {
 
     class Controller 
     {
-        private Persistence P = new Persistence();
-        string connectionString;
-        string dbPath = "";
+        private Persistence P;
+        private string pythonPath;
+        private string pythonScriptPath;
+        private PythonRunner pyRunner;
+        private string dbPath = "";
 
-        public Controller(string dbpath)
+        public Controller()
         {
-            //string dbpath = @"C:\Users\Enrico\Desktop\ordiniMI2018.sqlite";
-            dbPath = dbpath;
-            string sdb = ConfigurationManager.AppSettings["dbServer"]; 
+            this.dbPath = ConfigurationManager.AppSettings["dbordiniFile"];
+            this.pythonPath = ConfigurationManager.AppSettings["pythonPath"];
+            this.pythonScriptPath = ConfigurationManager.AppSettings["pyScripts"];
+            this.pyRunner = new PythonRunner(this.pythonPath, 20000);
+            P = new Persistence(dbPath);
 
-            switch (sdb)
+        }
+
+        public string loadOrdersTrend()
+        {
+            return P.readCustomerListORM();
+        }
+
+        public async Task<Bitmap> readCustomerOrdersChart(string pyScript, string customerStr)
+        {
+            Trace.WriteLine("Getting the orders chart ...");
+
+            pythonScriptPath = System.IO.Path.GetFullPath(pythonScriptPath);
+            try
             {
-                case "SQLiteConn": connectionString = ConfigurationManager.ConnectionStrings["SQLiteConn"].ConnectionString;
-                                   connectionString = connectionString.Replace("DBFILE", dbpath); 
-                                   P.factory = ConfigurationManager.ConnectionStrings["SQLiteConn"].ProviderName;
-                                   break;
-                case "LocalDbConn":connectionString = ConfigurationManager.ConnectionStrings["LocalSqlServConn"].ConnectionString; 
-                                   P.factory = ConfigurationManager.ConnectionStrings["LocalSqlServConn"].ProviderName;
-                                   break;
-                case "RemoteSqlServConn": connectionString = ConfigurationManager.ConnectionStrings["RemoteSQLConn"].ConnectionString;
-                                          P.factory = ConfigurationManager.ConnectionStrings["RemoteSQLConn"].ProviderName;
-                                          break;
+                Bitmap bmp = await this.pyRunner.getImageAsync(
+                    this.pythonScriptPath,
+                    pyScript,
+                    this.pythonScriptPath,
+                    this.dbPath,
+                    customerStr);
+                return bmp;
             }
-            P.connectionString = connectionString;
-        }
-
-        public void readDb(string custID) 
-        {
-            Trace.WriteLine("Controller read DB");
-            if(custID == "")
+            catch (Exception e)
             {
-                P.SelectTop100();
-            }
-            else
-            {
-                P.SelectCustOrders(custID);
+                Trace.WriteLine($"[ReadCustomerOrdersChart]: {e.ToString()}");
+                return null;
             }
         }
 
-        public void insert(string cust)
+        public string readSingleCutomer()
         {
-            P.Insert(cust);
+            return P.readRandomCustomer();
         }
 
-        public void delete(string cust)
-        {
-            P.Delete(cust);
-        }
-
-        public void update(string oldCust, string newCust)
-        {
-            P.Update(oldCust, newCust);
-        }
-
-        public void readCustomerList()
-        {
-            string res = P.readCustomerListORM(dbPath, 10);
-            Trace.WriteLine(res);
-        }
-
-        public void readCustomerOrder()
-        {
-            string res = P.readCustomerOrderORM(dbPath, "cust1");
-            Trace.WriteLine(res);
-        }
     }
 }

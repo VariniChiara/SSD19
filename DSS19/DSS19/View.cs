@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
-
-
 
 namespace DSS19
 {
@@ -18,17 +10,23 @@ namespace DSS19
 
         private Controller C;
         TextBoxTraceListener _textBoxListener;
-        
+
         public App()
         {
             InitializeComponent();
             _textBoxListener = new TextBoxTraceListener(txtConsole);
             Trace.Listeners.Add(_textBoxListener);
+            C = new Controller();
         }
 
-        private void splitContainer1_Panel2_Paint(object sender, PaintEventArgs e)
+        private void toolStripButton3_Click(object sender, EventArgs e)
         {
+            cleanView();
+        }
 
+        private void cleanView()
+        {
+            txtConsole.Text = "";
         }
 
         private void readDBToolStripMenuItem_Click(object sender, EventArgs e)
@@ -38,26 +36,50 @@ namespace DSS19
 
         private void readDb()
         {
-             txtConsole.AppendText("Read Db clicked \n");
+            txtConsole.AppendText("Read Db clicked \n");
             //C.readDb(txtCustomer.Text);
         }
 
-        private void loadDb()
+        private void selectSomeClientsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txtConsole.AppendText("Load Db button clicked \n");
-            string dbPath = "";
-            OpenFileDialog OFD = new OpenFileDialog(); //finestra per caricare il file del db
-            if (OFD.ShowDialog() == DialogResult.OK) //TODO mancano i controlli sul tipo del file
-            {
-                dbPath = OFD.FileName;
-                txtConsole.AppendText("Sqlite file name: " + dbPath + Environment.NewLine);
-            }
-            C = new Controller(dbPath);
+            txtConsole.AppendText("Select some clients \n");
+            //C.readCustomerList();
+        }
+
+        private void selectCust1OrderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtConsole.AppendText("Select cust1 \n");
+            //C.readCustomerOrder();
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
-            loadDb();
+            loadOrdersTrendChart();
+        }
+
+        private async void loadOrdersTrendChart()
+        {
+            txtConsole.AppendText("Load Db button clicked \n");
+            string customers = C.loadOrdersTrend();
+            Bitmap bmp = await C.readCustomerOrdersChart("chartOrders.py", customers);
+            pictureBox2.Image = bmp;
+        }
+        private void toolStripLabel1_Click(object sender, EventArgs e)
+        {
+            loadArima();
+        }
+
+        private async void loadArima()
+        {
+            string customer = C.readSingleCutomer();
+            Bitmap bmp = await C.readCustomerOrdersChart("arima_forecast.py", customer);
+            pictureBox2.Image = bmp;
+            // string prevision = await C.
+        }
+
+        private void splitContainer1_Panel2_Paint(object sender, PaintEventArgs e)
+        {
+
         }
 
         private void txtConsole_TextChanged(object sender, EventArgs e)
@@ -75,22 +97,6 @@ namespace DSS19
 
         }
 
-        private void toolStripButton3_Click(object sender, EventArgs e)
-        {
-            C.delete(txtCustomer.Text);
-        }
-
-        private void insertBtn_Click(object sender, EventArgs e)
-        {
-            C.insert(txtNewCustomer.Text);
-        }
-
-        private void updateBtn_Click(object sender, EventArgs e)
-        {
-
-            C.update(txtCustomer.Text, txtNewCustomer.Text);
-        }
-
         private void label1_Click(object sender, EventArgs e)
         {
 
@@ -99,21 +105,6 @@ namespace DSS19
         private void App_Load(object sender, EventArgs e)
         {
 
-        }
-
-        private void toolStripButton2_Click(object sender, EventArgs e)
-        {
-            C.readDb(txtCustomer.Text);
-        }
-
-        private void selectSomeClientsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            C.readCustomerList();
-        }
-
-        private void selectCust1OrderToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            C.readCustomerOrder();
         }
     }
 }
