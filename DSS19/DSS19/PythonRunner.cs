@@ -204,7 +204,7 @@ namespace PyGAP2019
             // first generate the batch, then run it
             StreamWriter fbat = new StreamWriter("runPyScript.bat");
             //fbat.WriteLine(@"echo off");
-            fbat.WriteLine($"conda activate tensorflow && call python {strCommand} && conda deactivate");
+            fbat.WriteLine($"conda activate ssd && call python {strCommand} && conda deactivate");
             fbat.WriteLine("exit");
             fbat.Close();
 
@@ -261,7 +261,7 @@ namespace PyGAP2019
                 if (sw.BaseStream.CanWrite)
                 {
                     sw.WriteLine("echo off");
-                    sw.WriteLine("conda activate tensorflow");
+                    sw.WriteLine("conda activate ssd");
                     sw.WriteLine($"call python {strCommand}");
                     sw.WriteLine("exit");
                 }

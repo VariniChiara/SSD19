@@ -42,10 +42,6 @@
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.label1 = new System.Windows.Forms.Label();
-            this.txtNewCustomer = new System.Windows.Forms.TextBox();
-            this.lblCustomer = new System.Windows.Forms.Label();
-            this.txtCustomer = new System.Windows.Forms.TextBox();
             this.txtConsole = new System.Windows.Forms.TextBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -114,6 +110,7 @@
             this.optimizationToolStripMenuItem.Name = "optimizationToolStripMenuItem";
             this.optimizationToolStripMenuItem.Size = new System.Drawing.Size(110, 24);
             this.optimizationToolStripMenuItem.Text = "Optimization";
+            this.optimizationToolStripMenuItem.Click += new System.EventHandler(this.optimizationToolStripMenuItem_Click);
             // 
             // toolStrip1
             // 
@@ -161,6 +158,7 @@
             this.toolStripLabel2.Name = "toolStripLabel2";
             this.toolStripLabel2.Size = new System.Drawing.Size(63, 24);
             this.toolStripLabel2.Text = "SARIMA";
+            this.toolStripLabel2.Click += new System.EventHandler(this.toolStripLabel2_Click);
             // 
             // splitContainer1
             // 
@@ -170,10 +168,6 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.label1);
-            this.splitContainer1.Panel1.Controls.Add(this.txtNewCustomer);
-            this.splitContainer1.Panel1.Controls.Add(this.lblCustomer);
-            this.splitContainer1.Panel1.Controls.Add(this.txtCustomer);
             this.splitContainer1.Panel1.Controls.Add(this.txtConsole);
             // 
             // splitContainer1.Panel2
@@ -185,55 +179,17 @@
             this.splitContainer1.SplitterDistance = 266;
             this.splitContainer1.TabIndex = 2;
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(4, 29);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(97, 17);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "New customer";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
-            // 
-            // txtNewCustomer
-            // 
-            this.txtNewCustomer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtNewCustomer.Location = new System.Drawing.Point(108, 29);
-            this.txtNewCustomer.Name = "txtNewCustomer";
-            this.txtNewCustomer.Size = new System.Drawing.Size(155, 22);
-            this.txtNewCustomer.TabIndex = 3;
-            // 
-            // lblCustomer
-            // 
-            this.lblCustomer.AutoSize = true;
-            this.lblCustomer.Location = new System.Drawing.Point(32, 3);
-            this.lblCustomer.Name = "lblCustomer";
-            this.lblCustomer.Size = new System.Drawing.Size(68, 17);
-            this.lblCustomer.TabIndex = 2;
-            this.lblCustomer.Text = "Customer";
-            // 
-            // txtCustomer
-            // 
-            this.txtCustomer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCustomer.Location = new System.Drawing.Point(108, 1);
-            this.txtCustomer.Name = "txtCustomer";
-            this.txtCustomer.Size = new System.Drawing.Size(156, 22);
-            this.txtCustomer.TabIndex = 1;
-            this.txtCustomer.TextChanged += new System.EventHandler(this.txtCustomer_TextChanged);
-            // 
             // txtConsole
             // 
             this.txtConsole.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtConsole.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtConsole.Location = new System.Drawing.Point(0, 78);
+            this.txtConsole.Location = new System.Drawing.Point(0, 0);
             this.txtConsole.Multiline = true;
             this.txtConsole.Name = "txtConsole";
             this.txtConsole.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtConsole.Size = new System.Drawing.Size(264, 317);
+            this.txtConsole.Size = new System.Drawing.Size(264, 395);
             this.txtConsole.TabIndex = 0;
             this.txtConsole.WordWrap = false;
             this.txtConsole.TextChanged += new System.EventHandler(this.txtConsole_TextChanged);
@@ -296,11 +252,7 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.TextBox txtConsole;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label lblCustomer;
-        private System.Windows.Forms.TextBox txtCustomer;
         private System.Windows.Forms.ToolStripButton deleteBtn;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtNewCustomer;
         private System.Windows.Forms.ToolStripMenuItem selectSomeClientsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem selectCust1OrderToolStripMenuItem;
         private System.Windows.Forms.PictureBox pictureBox2;

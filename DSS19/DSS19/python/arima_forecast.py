@@ -1,8 +1,9 @@
-# ARIMA, orders data series
+# ARIMA, orders data series 1
 import os,sys
 os.getcwd()
 local_path = sys.argv[1]
 #local_path = 'C:\\Users\\varin\\GitHub\\SSD19\\DSS19\\DSS19\\python'
+
 os.chdir(local_path) 
 
 import pandas as pd
@@ -48,13 +49,13 @@ def forecast_accuracy(forecast, actual):
 #dbfile = "C:\\Users\\varin\\Desktop\\ssd2019\\ordiniMI2019.sqlite"
 dbfile = sys.argv[2]
 customers = sys.argv[3]
-#customers = "'cust12'"
+#customers = "'cust52'"
 
 df = load_orders(dbfile,customers)
 
 # !pip3 install pyramid-arima
-#import pyramid.arima as pm
-import pmdarima as pm
+#import pmdarima.arima as pm
+import pyramid.arima as pm
 from statsmodels.tsa.arima_model import ARIMA
 
 # Forecast next 3 months
